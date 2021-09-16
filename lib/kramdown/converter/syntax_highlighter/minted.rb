@@ -8,10 +8,8 @@
 #
 
 module Kramdown::Converter::SyntaxHighlighter
-
   # Uses Minted to highlight code blocks and code spans.
   module Minted
-
     def self.call(converter, text, lang, type, _opts)
       opts = converter.options[:syntax_highlighter_opts]
 

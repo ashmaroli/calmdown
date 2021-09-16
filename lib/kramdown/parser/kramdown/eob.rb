@@ -10,7 +10,6 @@
 module Kramdown
   module Parser
     class Kramdown
-
       EOB_MARKER = /^\^\s*?\n/
 
       # Parse the EOB marker at the current location.
@@ -20,7 +19,6 @@ module Kramdown
         true
       end
       define_parser(:eob_marker, EOB_MARKER)
-
     end
   end
 end

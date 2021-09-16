@@ -15,7 +15,6 @@ require 'kramdown/parser/kramdown/extensions'
 module Kramdown
   module Parser
     class Kramdown
-
       LIST_ITEM_IAL = /^\s*(?:\{:(?!(?:#{ALD_ID_NAME})?:|\/)(#{ALD_ANY_CHARS}+)\})\s*/
       LIST_ITEM_IAL_CHECK = /^#{LIST_ITEM_IAL}?\s*\n/
 
@@ -126,13 +125,13 @@ module Kramdown
 
           # Handle the case where an EOB marker is inserted by a block IAL for the first paragraph
           it_children.delete_at(1) if it_children.first.type == :p &&
-            it_children.length >= 2 && it_children[1].type == :eob && it_children.first.options[:ial]
+                                      it_children.length >= 2 && it_children[1].type == :eob && it_children.first.options[:ial]
 
           if it_children.first.type == :p &&
-              (it_children.length < 2 || it_children[1].type != :blank ||
-              (it == list.children.last && it_children.length == 2 && !eob_found)) &&
-              (list.children.last != it || list.children.size == 1 ||
-              list.children[0..-2].any? {|cit| !cit.children.first || cit.children.first.type != :p || cit.children.first.options[:transparent] })
+             (it_children.length < 2 || it_children[1].type != :blank ||
+             (it == list.children.last && it_children.length == 2 && !eob_found)) &&
+             (list.children.last != it || list.children.size == 1 ||
+             list.children[0..-2].any? { |cit| !cit.children.first || cit.children.first.type != :p || cit.children.first.options[:transparent] })
             it_children.first.children.first.value << "\n" if it_children.size > 1 && it_children[1].type != :blank
             it_children.first.options[:transparent] = true
           end
@@ -152,8 +151,8 @@ module Kramdown
       def parse_definition_list
         children = @tree.children
         if !children.last || (children.length == 1 && children.last.type != :p) ||
-            (children.length >= 2 && children[-1].type != :p &&
-             (children[-1].type != :blank || children[-1].value != "\n" || children[-2].type != :p))
+           (children.length >= 2 && children[-1].type != :p &&
+            (children[-1].type != :blank || children[-1].value != "\n" || children[-2].type != :p))
           return false
         end
 
@@ -237,7 +236,7 @@ module Kramdown
         if children.length >= 1 && children.last.type == :dl
           children[-1].children.concat(deflist.children)
         elsif children.length >= 2 && children[-1].type == :blank &&
-            children[-2].type == :dl
+              children[-2].type == :dl
           children.pop
           children[-1].children.concat(deflist.children)
         else
@@ -278,7 +277,6 @@ module Kramdown
           end
         end
       end
-
     end
   end
 end

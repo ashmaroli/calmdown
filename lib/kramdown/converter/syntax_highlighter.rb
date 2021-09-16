@@ -9,7 +9,6 @@
 
 module Kramdown
   module Converter
-
     # == Container for Syntax Highlighters
     #
     # This module serves as container for the syntax highlighters that can be used together with
@@ -51,6 +50,5 @@ module Kramdown
     #                  the invocation in the +opts+ hash under the key :default_lang.
     module SyntaxHighlighter
     end
-
   end
 end

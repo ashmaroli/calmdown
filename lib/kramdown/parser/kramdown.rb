@@ -15,9 +15,7 @@ require 'kramdown/parser'
 # NOTE: use @src.pre_match only before other check/match?/... operations, otherwise the content is changed
 
 module Kramdown
-
   module Parser
-
     # Used for parsing a document in kramdown format.
     #
     # If you want to extend the functionality of the parser, you need to do the following:
@@ -58,7 +56,6 @@ module Kramdown
     #   Kramdown::Document.new(input_text, :input => 'ERBKramdown').to_html
     #
     class Kramdown < Base
-
       include ::Kramdown
 
       # Create a new Kramdown parser object with the given +options+.
@@ -114,7 +111,7 @@ module Kramdown
       # The parameter +link_defs+ is a hash where the keys are possibly unnormalized link IDs and
       # the values are two element arrays consisting of the link target and a title (can be +nil+).
       def update_link_definitions(link_defs)
-        link_defs.each {|k, v| @link_defs[normalize_link_id(k)] = v }
+        link_defs.each { |k, v| @link_defs[normalize_link_id(k)] = v }
       end
 
       # Adapt the object to allow parsing like specified in the options.
@@ -132,7 +129,7 @@ module Kramdown
 
       # Create the needed span parser regexps.
       def span_parser_regexps(parsers = @span_parsers)
-        span_start = /#{parsers.map {|name| @parsers[name].span_start }.join('|')}/
+        span_start = /#{parsers.map { |name| @parsers[name].span_start }.join('|')}/
         [span_start, /(?=#{span_start})/]
       end
 
@@ -251,7 +248,7 @@ module Kramdown
       # Reset the current parsing environment. The parameter +env+ can be used to set initial
       # values for one or more environment variables.
       def reset_env(opts = {})
-        opts = {text_type: :raw_text, stack: []}.merge(opts)
+        opts = { text_type: :raw_text, stack: [] }.merge(opts)
         @src = opts[:src]
         @tree = opts[:tree]
         @block_ial = opts[:block_ial]
@@ -292,7 +289,7 @@ module Kramdown
           if child.type == :text
             raw_text << child.value
           else
-            child.children.each {|c| append_text.call(c) }
+            child.children.each { |c| append_text.call(c) }
           end
         end
 
@@ -327,6 +324,7 @@ module Kramdown
       # be set by using the +meth_name+ parameter.
       def self.define_parser(name, start_re, span_start = nil, meth_name = "parse_#{name}")
         raise "A parser with the name #{name} already exists!" if @@parsers.key?(name)
+
         @@parsers[name] = Data.new(name, start_re, span_start, meth_name)
       end
 
@@ -368,9 +366,6 @@ module Kramdown
       require 'kramdown/parser/kramdown/smart_quotes'
       require 'kramdown/parser/kramdown/math'
       require 'kramdown/parser/kramdown/abbreviation'
-
     end
-
   end
-
 end

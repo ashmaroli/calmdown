@@ -12,27 +12,22 @@ require 'kramdown/converter'
 require 'kramdown/utils'
 
 module Kramdown
-
   module Converter
-
     # Converts a Kramdown::Document to a nested hash for further processing or debug output.
     class HashAST < Base
-
       def convert(el)
-        hash = {type: el.type}
+        hash = { type: el.type }
         hash[:attr] = el.attr unless el.attr.empty?
         hash[:value] = el.value unless el.value.nil?
         hash[:options] = el.options unless el.options.empty?
         unless el.children.empty?
           hash[:children] = []
-          el.children.each {|child| hash[:children] << convert(child) }
+          el.children.each { |child| hash[:children] << convert(child) }
         end
         hash
       end
-
     end
 
     HashAst = HashAST
-
   end
 end

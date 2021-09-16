@@ -8,10 +8,8 @@
 #
 
 module Kramdown
-
   # This error is raised when an error condition is encountered.
   #
   # *Note* that this error is only raised by the support framework for the parsers and converters.
   class Error < RuntimeError; end
-
 end

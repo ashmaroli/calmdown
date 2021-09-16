@@ -10,13 +10,12 @@
 module Kramdown
   module Parser
     class Kramdown
-
       TYPOGRAPHIC_SYMS = [['---', :mdash], ['--', :ndash], ['...', :hellip],
                           ['\\<<', '&lt;&lt;'], ['\\>>', '&gt;&gt;'],
                           ['<< ', :laquo_space], [' >>', :raquo_space],
                           ['<<', :laquo], ['>>', :raquo]]
       TYPOGRAPHIC_SYMS_SUBST = Hash[*TYPOGRAPHIC_SYMS.flatten]
-      TYPOGRAPHIC_SYMS_RE = /#{TYPOGRAPHIC_SYMS.map {|k, _v| Regexp.escape(k) }.join('|')}/
+      TYPOGRAPHIC_SYMS_RE = /#{TYPOGRAPHIC_SYMS.map { |k, _v| Regexp.escape(k) }.join('|')}/
 
       # Parse the typographic symbols at the current location.
       def parse_typographic_syms
@@ -38,7 +37,6 @@ module Kramdown
         end
       end
       define_parser(:typographic_syms, TYPOGRAPHIC_SYMS_RE, '--|\\.\\.\\.|(?:\\\\| )?(?:<<|>>)')
-
     end
   end
 end

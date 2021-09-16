@@ -10,7 +10,6 @@
 module Kramdown
   module Parser
     class Kramdown
-
       BLANK_LINE = /(?>^\s*\n)+/
 
       # Parse the blank line at the current postition.
@@ -24,7 +23,6 @@ module Kramdown
         true
       end
       define_parser(:blank_line, BLANK_LINE)
-
     end
   end
 end

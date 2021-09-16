@@ -11,10 +11,8 @@
 
 module Kramdown
   module Utils
-
     # Provides the ability to tranliterate Unicode strings into plain ASCII ones.
     module Unidecoder
-
       gem 'stringex'
       path = $:.find do |dir|
         File.directory?(File.join(File.expand_path(dir), "stringex", "unidecoder_data"))
@@ -43,8 +41,6 @@ module Kramdown
         end
 
       end
-
     end
-
   end
 end

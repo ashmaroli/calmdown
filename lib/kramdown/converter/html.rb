@@ -12,9 +12,7 @@ require 'kramdown/converter'
 require 'kramdown/utils'
 
 module Kramdown
-
   module Converter
-
     # Converts a Kramdown::Document to HTML.
     #
     # You can customize the HTML converter by sub-classing it and overriding the +convert_NAME+
@@ -28,7 +26,6 @@ module Kramdown
     # The return value of such a method has to be a string containing the element +el+ formatted as
     # HTML element.
     class Html < Base
-
       include ::Kramdown::Utils::Html
       include ::Kramdown::Parser::Html::Constants
 
@@ -90,7 +87,7 @@ module Kramdown
         if el.options[:transparent]
           inner(el, indent)
         elsif el.children.size == 1 && el.children.first.type == :img &&
-            el.children.first.options[:ial]&.[](:refs)&.include?('standalone')
+              el.children.first.options[:ial]&.[](:refs)&.include?('standalone')
           convert_standalone_image(el, indent)
         else
           format_as_block_html("p", el.attr, inner(el, indent), indent)
@@ -107,7 +104,7 @@ module Kramdown
         figure_attr['id'] = image_attr.delete('id') if image_attr.key?('id') and not figure_attr.key?('id')
 
         body = "#{' ' * (indent + @indent)}<img#{html_attributes(image_attr)} />\n" \
-          "#{' ' * (indent + @indent)}<figcaption>#{image_attr['alt']}</figcaption>\n"
+               "#{' ' * (indent + @indent)}<figcaption>#{image_attr['alt']}</figcaption>\n"
         format_as_indented_block_html("figure", figure_attr, body, indent)
       end
 
@@ -230,7 +227,7 @@ module Kramdown
 
       def convert_xml_comment(el, indent)
         if el.options[:category] == :block &&
-            (@stack.last.type != :html_element || @stack.last.options[:content_model] != :raw)
+           (@stack.last.type != :html_element || @stack.last.options[:content_model] != :raw)
           ' ' * indent << el.value << "\n"
         else
           el.value
@@ -343,7 +340,7 @@ module Kramdown
         if (result = @options[:typographic_symbols][el.value])
           escape_html(result, :text)
         else
-          TYPOGRAPHIC_SYMS[el.value].map {|e| entity_to_str(e) }.join('')
+          TYPOGRAPHIC_SYMS[el.value].map { |e| entity_to_str(e) }.join('')
         end
       end
 
@@ -530,11 +527,9 @@ module Kramdown
         if ol.children.empty?
           ''
         else
-          format_as_indented_block_html('div', {class: "footnotes", role: "doc-endnotes"}, convert(ol, 2), 0)
+          format_as_indented_block_html('div', { class: "footnotes", role: "doc-endnotes" }, convert(ol, 2), 0)
         end
       end
-
     end
-
   end
 end

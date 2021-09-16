@@ -10,20 +10,16 @@
 require 'yaml'
 
 module Kramdown
-
   # This module defines all options that are used by parsers and/or converters as well as providing
   # methods to deal with the options.
   module Options
-
     # Helper class introducing a boolean type for specifying boolean values (+true+ and +false+) as
     # option types.
     class Boolean
-
       # Return +true+ if +other+ is either +true+ or +false+
       def self.===(other)
         FalseClass === other || TrueClass === other
       end
-
     end
 
     # ----------------------------
@@ -54,6 +50,7 @@ module Kramdown
       raise ArgumentError, "Invalid option type #{type} specified" unless ALLOWED_TYPES.include?(type)
       raise ArgumentError, "Invalid type for default value" if !(type === default) && !default.nil?
       raise ArgumentError, "Missing validator block" if type == Object && block.nil?
+
       @options[name] = Definition.new(name, type, default, desc, block)
       @cached_defaults = nil
     end
@@ -71,10 +68,10 @@ module Kramdown
     # Return a Hash with the default values for all options.
     def self.defaults
       @cached_defaults ||= begin
-                             temp = {}
-                             @options.each {|_n, o| temp[o.name] = o.default }
-                             temp.freeze
-                           end
+        temp = {}
+        @options.each { |_n, o| temp[o.name] = o.default }
+        temp.freeze
+      end
     end
 
     # Merge the #defaults Hash with the *parsed* options from the given Hash, i.e. only valid option
@@ -96,6 +93,7 @@ module Kramdown
     def self.parse(name, data)
       name = name.to_sym
       raise ArgumentError, "No option named #{name} defined" unless @options.key?(name)
+
       unless @options[name].type === data
         data = data.to_s
         data = if @options[name].type == String
@@ -147,6 +145,7 @@ module Kramdown
       if size && val.size != size
         raise Kramdown::Error, "Option #{name} needs exactly #{size} values"
       end
+
       val
     end
 
@@ -164,6 +163,7 @@ module Kramdown
         end
       end
       raise Kramdown::Error, "Invalid type #{val.class} for option #{name}" unless Hash === val
+
       val
     end
 
@@ -304,6 +304,7 @@ module Kramdown
         if !(Array === v) || v.size > 2 || v.empty?
           raise Kramdown::Error, "Invalid structure for hash value of option #{name}"
         end
+
         v << nil if v.size == 1
       end
       val
@@ -368,9 +369,10 @@ module Kramdown
       else
         raise Kramdown::Error, "Invalid type #{val.class} for option toc_levels"
       end
-      if val.any? {|i| !TOC_LEVELS_RANGE.cover?(i) }
+      if val.any? { |i| !TOC_LEVELS_RANGE.cover?(i) }
         raise Kramdown::Error, "Level numbers for option toc_levels have to be integers from 1 to 6"
       end
+
       val
     end
 
@@ -412,7 +414,7 @@ module Kramdown
         SMART_QUOTES_ENTITIES
       else
         val = simple_array_validator(val, :smart_quotes, 4)
-        val.map! {|v| Integer(v) rescue v }
+        val.map! { |v| Integer(v) rescue v }
         val
       end
     end
@@ -599,10 +601,8 @@ module Kramdown
       Default: template
       Used by: HTML converter
     EOF
-      val.map! {|item| item.kind_of?(String) ? str_to_sym(item) : item }
+      val.map! { |item| item.kind_of?(String) ? str_to_sym(item) : item }
       simple_array_validator(val, :forbidden_inline_options)
     end
-
   end
-
 end

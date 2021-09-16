@@ -11,12 +11,9 @@ require 'kramdown/converter'
 require 'kramdown/utils'
 
 module Kramdown
-
   module Converter
-
     # Converts an element tree to the kramdown format.
     class Kramdown < Base
-
       # :stopdoc:
 
       include ::Kramdown::Utils::Html
@@ -29,27 +26,27 @@ module Kramdown
         @stack = []
       end
 
-      def convert(el, opts = {indent: 0})
+      def convert(el, opts = { indent: 0 })
         res = send("convert_#{el.type}", el, opts)
         res = res.dup if res.frozen?
         if ![:html_element, :li, :dt, :dd, :td].include?(el.type) && (ial = ial_for_element(el))
           res << ial
           res << "\n\n" if el.block?
         elsif [:ul, :dl, :ol, :codeblock].include?(el.type) && opts[:next] &&
-            ([el.type, :codeblock].include?(opts[:next].type) ||
-             (opts[:next].type == :blank && opts[:nnext] &&
-              [el.type, :codeblock].include?(opts[:nnext].type)))
+              ([el.type, :codeblock].include?(opts[:next].type) ||
+               (opts[:next].type == :blank && opts[:nnext] &&
+                [el.type, :codeblock].include?(opts[:nnext].type)))
           res << "^\n\n"
         elsif el.block? &&
-            ![:li, :dd, :dt, :td, :th, :tr, :thead, :tbody, :tfoot, :blank].include?(el.type) &&
-            (el.type != :html_element || @stack.last.type != :html_element) &&
-            (el.type != :p || !el.options[:transparent])
+              ![:li, :dd, :dt, :td, :th, :tr, :thead, :tbody, :tfoot, :blank].include?(el.type) &&
+              (el.type != :html_element || @stack.last.type != :html_element) &&
+              (el.type != :p || !el.options[:transparent])
           res << "\n"
         end
         res
       end
 
-      def inner(el, opts = {indent: 0})
+      def inner(el, opts = { indent: 0 })
         @stack.push(el)
         result = +''
         el.children.each_with_index do |inner_el, index|
@@ -96,12 +93,12 @@ module Kramdown
       end
 
       def convert_codeblock(el, _opts)
-        el.value.split(/\n/).map {|l| l.empty? ? "    " : "    #{l}" }.join("\n") + "\n"
+        el.value.split(/\n/).map { |l| l.empty? ? "    " : "    #{l}" }.join("\n") + "\n"
       end
 
       def convert_blockquote(el, opts)
         opts[:indent] += 2
-        inner(el, opts).chomp.split(/\n/).map {|l| "> #{l}" }.join("\n") << "\n"
+        inner(el, opts).chomp.split(/\n/).map { |l| "> #{l}" }.join("\n") << "\n"
       end
 
       def convert_header(el, opts)
@@ -136,12 +133,12 @@ module Kramdown
         text = inner(el, opts)
         newlines = text.scan(/\n*\Z/).first
         first, *last = text.split(/\n/)
-        last = last.map {|l| " " * width + l }.join("\n")
+        last = last.map { |l| " " * width + l }.join("\n")
         text = (first.nil? ? "\n" : first + (last.empty? ? "" : "\n") + last + newlines)
         if el.children.first && el.children.first.type == :p && !el.children.first.options[:transparent]
           res = +"#{sym}#{text}"
           res << "^\n" if el.children.size == 1 && @stack.last.children.last == el &&
-            (@stack.last.children.any? {|c| c.children.first.type != :p } || @stack.last.children.size == 1)
+                          (@stack.last.children.any? { |c| c.children.first.type != :p } || @stack.last.children.size == 1)
           res
         elsif el.children.first && el.children.first.type == :codeblock
           "#{sym}\n    #{text}"
@@ -160,7 +157,7 @@ module Kramdown
         text = inner(el, opts)
         newlines = text.scan(/\n*\Z/).first
         first, *last = text.split(/\n/)
-        last = last.map {|l| " " * width + l }.join("\n")
+        last = last.map { |l| " " * width + l }.join("\n")
         text = first.to_s + (last.empty? ? "" : "\n") + last + newlines
         text.chomp! if text =~ /\n\n\Z/ && opts[:next] && opts[:next].type == :dd
         text << "\n" if text !~ /\n\n\Z/ && opts[:next] && opts[:next].type == :dt
@@ -191,12 +188,12 @@ module Kramdown
         markdown_attr = el.options[:category] == :block && el.children.any? do |c|
           c.type != :html_element &&
             (c.type != :p || !c.options[:transparent] ||
-             c.children.any? {|t| !HTML_ELEMENT_TYPES.member?(t.type) }) &&
+             c.children.any? { |t| !HTML_ELEMENT_TYPES.member?(t.type) }) &&
             c.block?
         end
         opts[:force_raw_text] = true if %w[script pre code].include?(el.value)
         opts[:raw_text] = opts[:force_raw_text] || opts[:block_raw_text] || \
-          (el.options[:category] != :span && !markdown_attr)
+                          (el.options[:category] != :span && !markdown_attr)
         opts[:block_raw_text] = true if el.options[:category] == :block && opts[:raw_text]
         res = inner(el, opts)
         if el.options[:category] == :span
@@ -223,7 +220,7 @@ module Kramdown
 
       def convert_xml_comment(el, _opts)
         if el.options[:category] == :block &&
-            (@stack.last.type != :html_element || @stack.last.options[:content_model] != :raw)
+           (@stack.last.type != :html_element || @stack.last.options[:content_model] != :raw)
           el.value + "\n"
         else
           el.value.dup
@@ -238,7 +235,7 @@ module Kramdown
 
       def convert_thead(el, opts)
         rows = inner(el, opts)
-        if opts[:alignment].all? {|a| a == :default }
+        if opts[:alignment].all? { |a| a == :default }
           "#{rows}|#{'-' * 10}\n"
         else
           "#{rows}| " + opts[:alignment].map do |a|
@@ -264,7 +261,7 @@ module Kramdown
       end
 
       def convert_tr(el, opts)
-        "| #{el.children.map {|c| convert(c, opts) }.join(' | ')} |\n"
+        "| #{el.children.map { |c| convert(c, opts) }.join(' | ')} |\n"
       end
 
       def convert_td(el, opts)
@@ -287,7 +284,7 @@ module Kramdown
         if el.attr['href'].empty?
           "[#{inner(el, opts)}]()"
         elsif el.attr['href'] =~ /^(?:http|ftp)/ || el.attr['href'].count("()") > 0
-          index = if (link_el = @linkrefs.find {|c| c.attr['href'] == el.attr['href'] })
+          index = if (link_el = @linkrefs.find { |c| c.attr['href'] == el.attr['href'] })
                     @linkrefs.index(link_el) + 1
                   else
                     @linkrefs << el
@@ -395,13 +392,14 @@ module Kramdown
         res = +''
         @footnotes.each do |name, data|
           res << "[^#{name}]:\n"
-          res << inner(data).chomp.split(/\n/).map {|l| "    #{l}" }.join("\n") + "\n\n"
+          res << inner(data).chomp.split(/\n/).map { |l| "    #{l}" }.join("\n") + "\n\n"
         end
         res
       end
 
       def create_abbrev_defs
         return '' unless @root.options[:abbrev_defs]
+
         res = +''
         @root.options[:abbrev_defs].each do |name, text|
           res << "*[#{name}]: #{text}\n"
@@ -415,10 +413,11 @@ module Kramdown
         res = el.attr.map do |k, v|
           next if [:img, :a].include?(el.type) && ['href', 'src', 'alt', 'title'].include?(k)
           next if el.type == :header && k == 'id' && !v.strip.empty?
+
           if v.nil?
             ''
           elsif k == 'class' && !v.empty? && !v.index(/[\.#]/)
-            " " + v.split(/\s+/).map {|w| ".#{w}" }.join(" ")
+            " " + v.split(/\s+/).map { |w| ".#{w}" }.join(" ")
           elsif k == 'id' && !v.strip.empty?
             " ##{v}"
           else
@@ -426,11 +425,11 @@ module Kramdown
           end
         end.compact.join('')
         res = "toc" + (res.strip.empty? ? '' : " #{res}") if (el.type == :ul || el.type == :ol) &&
-          el.options.dig(:ial, :refs)&.include?('toc')
+                                                             el.options.dig(:ial, :refs)&.include?('toc')
         res = "footnotes" + (res.strip.empty? ? '' : " #{res}") if (el.type == :ul || el.type == :ol) &&
-          el.options.dig(:ial, :refs)&.include?('footnotes')
+                                                                   el.options.dig(:ial, :refs)&.include?('footnotes')
         if el.type == :dl && el.options[:ial] && el.options[:ial][:refs]
-          auto_ids = el.options[:ial][:refs].select {|ref| ref.start_with?('auto_ids') }.join(" ")
+          auto_ids = el.options[:ial][:refs].select { |ref| ref.start_with?('auto_ids') }.join(" ")
           res = auto_ids << (res.strip.empty? ? '' : " #{res}") unless auto_ids.empty?
         end
         res.strip.empty? ? nil : "{:#{res}}"
@@ -441,8 +440,6 @@ module Kramdown
       end
 
       # :startdoc:
-
     end
-
   end
 end

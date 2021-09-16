@@ -12,7 +12,6 @@ require 'kramdown/parser/html'
 module Kramdown
   module Parser
     class Kramdown
-
       # Parse the HTML entity at the current location.
       def parse_html_entity
         start_line_number = @src.current_line_number
@@ -28,7 +27,6 @@ module Kramdown
         end
       end
       define_parser(:html_entity, Kramdown::Parser::Html::Constants::HTML_ENTITY_RE, '&')
-
     end
   end
 end

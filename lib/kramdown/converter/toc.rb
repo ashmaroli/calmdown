@@ -10,9 +10,7 @@
 require 'kramdown/converter'
 
 module Kramdown
-
   module Converter
-
     # Converts a Kramdown::Document to an element tree that represents the table of contents.
     #
     # The returned tree consists of Element objects of type :toc where the root element is just used
@@ -23,7 +21,6 @@ module Kramdown
     # Since the TOC tree consists of special :toc elements, one cannot directly feed this tree to
     # other converters!
     class Toc < Base
-
       def initialize(root, options)
         super
         @toc = Element.new(:toc)
@@ -37,7 +34,7 @@ module Kramdown
           attr['id'] = generate_id(el.options[:raw_text]) if @options[:auto_ids] && !attr['id']
           add_to_toc(el, attr['id']) if attr['id']
         else
-          el.children.each {|child| convert(child) }
+          el.children.each { |child| convert(child) }
         end
         @toc
       end
@@ -62,8 +59,6 @@ module Kramdown
           end
         end
       end
-
     end
-
   end
 end

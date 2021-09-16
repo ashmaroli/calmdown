@@ -12,7 +12,6 @@ require 'kramdown/parser/kramdown/block_boundary'
 module Kramdown
   module Parser
     class Kramdown
-
       BLOCK_MATH_START = /^#{OPT_SPACE}(\\)?\$\$(.*?)\$\$(\s*?\n)?/m
 
       # Parse the math block at the current location.
@@ -47,7 +46,6 @@ module Kramdown
         @tree.children << Element.new(:math, @src[1].strip, nil, category: :span, location: start_line_number)
       end
       define_parser(:inline_math, INLINE_MATH_START, '\$')
-
     end
   end
 end

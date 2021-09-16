@@ -9,14 +9,12 @@
 
 module Kramdown
   module Utils
-
     # A simple least recently used (LRU) cache.
     #
     # The cache relies on the fact that Ruby's Hash class maintains insertion order. So deleting
     # and re-inserting a key-value pair on access moves the key to the last position. When an
     # entry is added and the cache is full, the first entry is removed.
     class LRUCache
-
       # Creates a new LRUCache that can hold +size+ entries.
       def initialize(size)
         @size = size
@@ -34,8 +32,6 @@ module Kramdown
         @cache[key] = value
         @cache.shift if @cache.length > @size
       end
-
     end
-
   end
 end

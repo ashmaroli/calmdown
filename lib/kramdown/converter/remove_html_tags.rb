@@ -10,9 +10,7 @@
 require 'kramdown/converter'
 
 module Kramdown
-
   module Converter
-
     # Removes all block (and optionally span) level HTML tags from the element tree.
     #
     # This converter can be used on parsed HTML documents to get an element tree that will only
@@ -23,7 +21,6 @@ module Kramdown
     #
     # This converter modifies the given tree in-place and returns it.
     class RemoveHtmlTags < Base
-
       def initialize(root, options)
         super
         @options[:template] = ''
@@ -36,11 +33,11 @@ module Kramdown
         index = 0
         while index < children.length
           if [:xml_pi].include?(children[index].type) ||
-              (children[index].type == :html_element && %w[style script].include?(children[index].value))
+             (children[index].type == :html_element && %w[style script].include?(children[index].value))
             children[index..index] = []
           elsif children[index].type == :html_element &&
-            ((@options[:remove_block_html_tags] && children[index].options[:category] == :block) ||
-             (@options[:remove_span_html_tags] && children[index].options[:category] == :span))
+                ((@options[:remove_block_html_tags] && children[index].options[:category] == :block) ||
+                 (@options[:remove_span_html_tags] && children[index].options[:category] == :span))
             children[index..index] = children[index].children
           else
             convert(children[index])
@@ -50,8 +47,6 @@ module Kramdown
         el.children = children
         real_el || el
       end
-
     end
-
   end
 end

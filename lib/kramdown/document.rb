@@ -44,7 +44,6 @@ require 'kramdown/options'
 require 'kramdown/utils'
 
 module Kramdown
-
   # Return the data directory for kramdown.
   def self.data_dir
     unless defined?(@data_dir)
@@ -71,7 +70,6 @@ module Kramdown
   # The second argument to the ::new method is an options hash for customizing the behaviour of the
   # used parser and the converter. See ::new for more information!
   class Document
-
     # The root Element of the element tree. It is immediately available after the ::new method has
     # been called.
     attr_accessor :root
@@ -102,7 +100,7 @@ module Kramdown
         @root, @warnings = Parser.const_get(parser).parse(source, @options)
       else
         raise Kramdown::Error, "kramdown has no parser to handle the specified " \
-          "input format: #{@options[:input]}"
+                               "input format: #{@options[:input]}"
       end
     end
 
@@ -112,7 +110,7 @@ module Kramdown
     # For example, +to_html+ would instantiate the Kramdown::Converter::Html class.
     def method_missing(id, *attr, &block)
       if id.to_s =~ /^to_(\w+)$/ && (name = Utils.camelize($1)) &&
-          try_require('converter', name) && Converter.const_defined?(name)
+         try_require('converter', name) && Converter.const_defined?(name)
         output, warnings = Converter.const_get(name).convert(@root, @options)
         @warnings.concat(warnings)
         output
@@ -133,7 +131,5 @@ module Kramdown
       true
     end
     protected :try_require
-
   end
-
 end

@@ -10,7 +10,6 @@
 module Kramdown
   module Parser
     class Kramdown
-
       CODESPAN_DELIMITER = /`+/
 
       # Parse the codespan at the current scanner location.
@@ -48,7 +47,6 @@ module Kramdown
         end
       end
       define_parser(:codespan, CODESPAN_DELIMITER, '`')
-
     end
   end
 end

@@ -12,13 +12,12 @@ require 'kramdown/parser/html'
 module Kramdown
   module Parser
     class Kramdown
-
       include Kramdown::Parser::Html::Parser
 
       # Mapping of markdown attribute value to content model. I.e. :raw when "0", :default when "1"
       # (use default content model for the HTML element), :span when "span", :block when block and
       # for everything else +nil+ is returned.
-      HTML_MARKDOWN_ATTR_MAP = {"0" => :raw, "1" => :default, "span" => :span, "block" => :block}
+      HTML_MARKDOWN_ATTR_MAP = { "0" => :raw, "1" => :default, "span" => :span, "block" => :block }
 
       TRAILING_WHITESPACE = /[ \t]*\n/
 
@@ -116,7 +115,7 @@ module Kramdown
           end
 
           attrs = parse_html_attributes(@src[2], line, HTML_ELEMENT[tag_name])
-          attrs.each_value {|value| value.gsub!(/\n+/, ' ') unless value.empty? }
+          attrs.each_value { |value| value.gsub!(/\n+/, ' ') unless value.empty? }
 
           do_parsing = if HTML_CONTENT_MODEL[tag_name] == :raw || @tree.options[:content_model] == :raw
                          false
@@ -156,7 +155,6 @@ module Kramdown
         end
       end
       define_parser(:span_html, HTML_SPAN_START, '<')
-
     end
   end
 end

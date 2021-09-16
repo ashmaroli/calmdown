@@ -11,9 +11,7 @@ require 'kramdown/utils'
 require 'kramdown/parser'
 
 module Kramdown
-
   module Parser
-
     # == \Base class for parsers
     #
     # This class serves as base class for parsers. It provides common methods that can/should be
@@ -32,7 +30,6 @@ module Kramdown
     #
     # Have a look at the Base::parse, Base::new and Base#parse methods for additional information!
     class Base
-
       # The hash with the parsing options.
       attr_reader :options
 
@@ -92,6 +89,7 @@ module Kramdown
         unless source.valid_encoding?
           raise "The source text contains invalid characters for the used encoding #{source.encoding}"
         end
+
         source = source.encode('UTF-8')
         source.gsub!(/\r\n?/, "\n")
         source.chomp!
@@ -123,9 +121,6 @@ module Kramdown
         end
         result
       end
-
     end
-
   end
-
 end

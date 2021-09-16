@@ -15,7 +15,6 @@ require 'kramdown/parser/kramdown/paragraph'
 module Kramdown
   module Parser
     class Kramdown
-
       CODEBLOCK_START = INDENT
       CODEBLOCK_MATCH = /(?:#{BLANK_LINE}?(?:#{INDENT}[ \t]*\S.*\n)+(?:(?!#{IAL_BLOCK_START}|#{EOB_MARKER}|^#{OPT_SPACE}#{LAZY_END_HTML_STOP}|^#{OPT_SPACE}#{LAZY_END_HTML_START})^[ \t]*\S.*\n)*)*/
 
@@ -51,7 +50,6 @@ module Kramdown
         end
       end
       define_parser(:codeblock_fenced, FENCED_CODEBLOCK_START)
-
     end
   end
 end

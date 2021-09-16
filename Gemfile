@@ -7,4 +7,6 @@ gemspec
 gem 'minitest'
 gem 'rake'
 gem 'rouge'
+gem 'rubocop', '~> 1.18.0'
+gem 'rubocop-performance'
 gem 'stringex'

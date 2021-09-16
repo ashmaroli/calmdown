@@ -16,7 +16,6 @@ require 'kramdown/parser/kramdown/html'
 module Kramdown
   module Parser
     class Kramdown
-
       LAZY_END_HTML_SPAN_ELEMENTS = HTML_SPAN_ELEMENTS + %w[script]
       LAZY_END_HTML_START = /<(?>(?!(?:#{LAZY_END_HTML_SPAN_ELEMENTS.join('|')})\b)#{REXML::Parsers::BaseParser::UNAME_STR})/
       LAZY_END_HTML_STOP = /<\/(?!(?:#{LAZY_END_HTML_SPAN_ELEMENTS.join('|')})\b)#{REXML::Parsers::BaseParser::UNAME_STR}\s*>/m
@@ -56,7 +55,6 @@ module Kramdown
       def paragraph_end
         self.class::PARAGRAPH_END
       end
-
     end
   end
 end

@@ -11,9 +11,7 @@ require 'set'
 require 'kramdown/converter'
 
 module Kramdown
-
   module Converter
-
     # Converts an element tree to LaTeX.
     #
     # This converter uses ideas from other Markdown-to-LaTeX converters like Pandoc and Maruku.
@@ -29,7 +27,6 @@ module Kramdown
     # The return value of such a method has to be a string containing the element +el+ formatted
     # correctly as LaTeX markup.
     class Latex < Base
-
       # Initialize the LaTeX converter with the +root+ element and the conversion +options+.
       def initialize(root, options)
         super
@@ -68,7 +65,7 @@ module Kramdown
 
       def convert_p(el, opts)
         if el.children.size == 1 && el.children.first.type == :img &&
-            !(img = convert_img(el.children.first, opts)).empty?
+           !(img = convert_img(el.children.first, opts)).empty?
           convert_standalone_image(el, opts, img)
         else
           "#{latex_link_target(el)}#{inner(el, opts)}\n\n"
@@ -89,7 +86,7 @@ module Kramdown
         lang = extract_code_language(el.attr)
 
         if @options[:syntax_highlighter] == :minted &&
-            (highlighted_code = highlight_code(el.value, lang, :block))
+           (highlighted_code = highlight_code(el.value, lang, :block))
           @data[:packages] << 'minted'
           "#{latex_link_target(el)}#{highlighted_code}\n"
         elsif show_whitespace || lang
@@ -164,7 +161,7 @@ module Kramdown
       end
 
       def convert_xml_comment(el, _opts)
-        el.value.split(/\n/).map {|l| "% #{l}" }.join("\n") + "\n"
+        el.value.split(/\n/).map { |l| "% #{l}" }.join("\n") + "\n"
       end
 
       def convert_xml_pi(_el, _opts)
@@ -172,11 +169,11 @@ module Kramdown
         ''
       end
 
-      TABLE_ALIGNMENT_CHAR = {default: 'l', left: 'l', center: 'c', right: 'r'} # :nodoc:
+      TABLE_ALIGNMENT_CHAR = { default: 'l', left: 'l', center: 'c', right: 'r' } # :nodoc:
 
       def convert_table(el, opts)
         @data[:packages] << 'longtable'
-        align = el.options[:alignment].map {|a| TABLE_ALIGNMENT_CHAR[a] }.join('|')
+        align = el.options[:alignment].map { |a| TABLE_ALIGNMENT_CHAR[a] }.join('|')
         attrs = attribute_list(el)
         "#{latex_link_target(el)}\\begin{longtable}{|#{align}|}#{attrs}\n" \
           "\\hline\n#{inner(el, opts)}\\hline\n\\end{longtable}#{attrs}\n\n"
@@ -195,7 +192,7 @@ module Kramdown
       end
 
       def convert_tr(el, opts)
-        el.children.map {|c| send("convert_#{c.type}", c, opts) }.join(' & ') << "\\\\\n"
+        el.children.map { |c| send("convert_#{c.type}", c, opts) }.join(' & ') << "\\\\\n"
       end
 
       def convert_td(el, opts)
@@ -203,13 +200,13 @@ module Kramdown
       end
 
       def convert_comment(el, _opts)
-        el.value.split(/\n/).map {|l| "% #{l}" }.join("\n") << "\n"
+        el.value.split(/\n/).map { |l| "% #{l}" }.join("\n") << "\n"
       end
 
       def convert_br(_el, opts)
         res = +"\\newline"
         res << "\n" if (c = opts[:parent].children[opts[:index] + 1]) &&
-          (c.type != :text || c.value !~ /^\s*\n/)
+                       (c.type != :text || c.value !~ /^\s*\n/)
         res
       end
 
@@ -239,7 +236,7 @@ module Kramdown
       def convert_codespan(el, _opts)
         lang = extract_code_language(el.attr)
         if @options[:syntax_highlighter] == :minted &&
-            (highlighted_code = highlight_code(el.value, lang, :span))
+           (highlighted_code = highlight_code(el.value, lang, :span))
           @data[:packages] << 'minted'
           "#{latex_link_target(el)}#{highlighted_code}"
         else
@@ -517,7 +514,7 @@ module Kramdown
         8194 => ['\hskip .5em\relax'],
         8195 => ['\quad'],
       } # :nodoc:
-      ENTITY_CONV_TABLE.each_value {|v| v[0] = "#{v[0]}{}" }
+      ENTITY_CONV_TABLE.each_value { |v| v[0] = "#{v[0]}{}" }
 
       def entity_to_latex(entity)
         text, package = ENTITY_CONV_TABLE[entity.code_point]
@@ -573,7 +570,7 @@ module Kramdown
 
       # Normalize the abbreviation key so that it only contains allowed ASCII character
       def normalize_abbreviation_key(key)
-        key.gsub(/\W/) {|m| m.unpack('H*').first }
+        key.gsub(/\W/) { |m| m.unpack('H*').first }
       end
 
       # Wrap the +text+ inside a LaTeX environment of type +type+. The element +el+ is passed on to
@@ -597,7 +594,7 @@ module Kramdown
 
       # Return a LaTeX comment containing all attributes as 'key="value"' pairs.
       def attribute_list(el)
-        attrs = el.attr.map {|k, v| v.nil? ? '' : " #{k}=\"#{v}\"" }.compact.sort.join('')
+        attrs = el.attr.map { |k, v| v.nil? ? '' : " #{k}=\"#{v}\"" }.compact.sort.join('')
         attrs = "   % #{attrs}" unless attrs.empty?
         attrs
       end
@@ -611,15 +608,13 @@ module Kramdown
         ">"  => "\\textgreater{}",
         "["  => "{[}",
         "]"  => "{]}",
-      }.merge(Hash[*("{}$%&_#".each_char.map {|c| [c, "\\#{c}"] }.flatten)]) # :nodoc:
-      ESCAPE_RE = Regexp.union(*ESCAPE_MAP.collect {|k, _v| k }) # :nodoc:
+      }.merge(Hash[*("{}$%&_#".each_char.map { |c| [c, "\\#{c}"] }.flatten)]) # :nodoc:
+      ESCAPE_RE = Regexp.union(*ESCAPE_MAP.collect { |k, _v| k }) # :nodoc:
 
       # Escape the special LaTeX characters in the string +str+.
       def escape(str)
-        str.gsub(ESCAPE_RE) {|m| ESCAPE_MAP[m] }
+        str.gsub(ESCAPE_RE) { |m| ESCAPE_MAP[m] }
       end
-
     end
-
   end
 end

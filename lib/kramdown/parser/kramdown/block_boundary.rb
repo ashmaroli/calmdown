@@ -14,7 +14,6 @@ require 'kramdown/parser/kramdown/eob'
 module Kramdown
   module Parser
     class Kramdown
-
       BLOCK_BOUNDARY = /#{BLANK_LINE}|#{EOB_MARKER}|#{IAL_BLOCK_START}|\Z/
 
       # Return +true+ if we are after a block boundary.
@@ -28,7 +27,6 @@ module Kramdown
       def before_block_boundary?
         @src.check(self.class::BLOCK_BOUNDARY)
       end
-
     end
   end
 end

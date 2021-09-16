@@ -13,17 +13,13 @@ require 'kramdown/utils'
 require 'kramdown/parser'
 
 module Kramdown
-
   module Parser
-
     # Used for parsing an HTML document.
     #
     # The parsing code is in the Parser module that can also be used by other parsers.
     class Html < Base
-
       # Contains all constants that are used when parsing.
       module Constants
-
         #:stopdoc:
         # The following regexps are based on the ones used by REXML, with some slight modifications.
         HTML_DOCTYPE_RE = /<!DOCTYPE.*?>/im
@@ -45,10 +41,10 @@ module Kramdown
         # The following elements are also parsed as raw since they need child elements that cannot
         # be expressed using kramdown syntax: colgroup table tbody thead tfoot tr ul ol
 
-        HTML_CONTENT_MODEL = Hash.new {|h, k| h[k] = :raw }
-        HTML_CONTENT_MODEL_BLOCK.each {|i| HTML_CONTENT_MODEL[i] = :block }
-        HTML_CONTENT_MODEL_SPAN.each {|i| HTML_CONTENT_MODEL[i] = :span }
-        HTML_CONTENT_MODEL_RAW.each {|i| HTML_CONTENT_MODEL[i] = :raw }
+        HTML_CONTENT_MODEL = Hash.new { |h, k| h[k] = :raw }
+        HTML_CONTENT_MODEL_BLOCK.each { |i| HTML_CONTENT_MODEL[i] = :block }
+        HTML_CONTENT_MODEL_SPAN.each { |i| HTML_CONTENT_MODEL[i] = :span }
+        HTML_CONTENT_MODEL_RAW.each { |i| HTML_CONTENT_MODEL[i] = :raw }
 
         # Some HTML elements like script belong to both categories (i.e. are valid in block and
         # span HTML) and don't appear therefore!
@@ -75,7 +71,6 @@ module Kramdown
       # @stack for storing the needed state and @src (instance of StringScanner) for the actual
       # parsing.
       module Parser
-
         include Constants
 
         # Process the HTML start tag that has already be scanned/checked via @src.
@@ -190,12 +185,10 @@ module Kramdown
 
           @tree = @stack.pop
         end
-
       end
 
       # Converts HTML elements to native elements if possible.
       class ElementConverter
-
         # :stopdoc:
 
         include Constants
@@ -240,7 +233,7 @@ module Kramdown
             return
           when :html_element
           when :root
-            el.children.each {|c| process(c) }
+            el.children.each { |c| process(c) }
             remove_whitespace_children(el)
             return
           else return
@@ -317,7 +310,7 @@ module Kramdown
         end
 
         def remove_text_children(el)
-          el.children.delete_if {|c| c.type == :text }
+          el.children.delete_if { |c| c.type == :text }
         end
 
         def wrap_text_children(el)
@@ -341,6 +334,7 @@ module Kramdown
 
         def strip_whitespace(el)
           return if el.children.empty?
+
           if el.children.first.type == :text
             el.children.first.value.lstrip!
           end
@@ -367,7 +361,7 @@ module Kramdown
 
         def extract_text(el, raw)
           raw << el.value.to_s if el.type == :text
-          el.children.each {|c| extract_text(c, raw) }
+          el.children.each { |c| extract_text(c, raw) }
         end
 
         def convert_textarea(el)
@@ -383,7 +377,7 @@ module Kramdown
           end
         end
 
-        EMPHASIS_TYPE_MAP = {'em' => :em, 'i' => :em, 'strong' => :strong, 'b' => :strong}
+        EMPHASIS_TYPE_MAP = { 'em' => :em, 'i' => :em, 'strong' => :strong, 'b' => :strong }
         def convert_em(el)
           text = +''
           extract_text(el, text)
@@ -471,17 +465,17 @@ module Kramdown
                 end
               end
             else
-              c.children.each {|cc| calc_alignment.call(cc) }
+              c.children.each { |cc| calc_alignment.call(cc) }
             end
           end
           calc_alignment.call(el)
-          el.children.delete_if {|c| c.type == :html_element }
+          el.children.delete_if { |c| c.type == :html_element }
 
           change_th_type = lambda do |c|
             if c.type == :th
               c.type = :td
             else
-              c.children.each {|cc| change_th_type.call(cc) }
+              c.children.each { |cc| change_th_type.call(cc) }
             end
           end
           change_th_type.call(el)
@@ -503,7 +497,7 @@ module Kramdown
             if c.value == 'th' || c.value == 'td'
               return false unless only_phrasing_content.call(c)
             else
-              c.children.each {|cc| check_cells.call(cc) }
+              c.children.each { |cc| check_cells.call(cc) }
             end
           end
           check_cells.call(el)
@@ -511,7 +505,7 @@ module Kramdown
           nr_cells = 0
           check_nr_cells = lambda do |t|
             if t.value == 'tr'
-              count = t.children.select {|cc| cc.value == 'th' || cc.value == 'td' }.length
+              count = t.children.select { |cc| cc.value == 'th' || cc.value == 'td' }.length
               if count != nr_cells
                 if nr_cells == 0
                   nr_cells = count
@@ -521,7 +515,7 @@ module Kramdown
                 end
               end
             else
-              t.children.each {|cc| check_nr_cells.call(cc) }
+              t.children.each { |cc| check_nr_cells.call(cc) }
             end
           end
           check_nr_cells.call(el)
@@ -530,27 +524,28 @@ module Kramdown
           alignment = nil
           check_alignment = proc do |t|
             if t.value == 'tr'
-              cur_alignment = t.children.select {|cc| cc.value == 'th' || cc.value == 'td' }.map do |cell|
+              cur_alignment = t.children.select { |cc| cc.value == 'th' || cc.value == 'td' }.map do |cell|
                 md = /text-align:\s+(center|left|right|justify|inherit)/.match(cell.attr['style'].to_s)
                 return false if md && (md[1] == 'justify' || md[1] == 'inherit')
+
                 md.nil? ? :default : md[1]
               end
               alignment = cur_alignment if alignment.nil?
               return false if alignment != cur_alignment
             else
-              t.children.each {|cc| check_alignment.call(cc) }
+              t.children.each { |cc| check_alignment.call(cc) }
             end
           end
           check_alignment.call(el)
 
           check_rows = lambda do |t, type|
-            t.children.all? {|r| (r.value == 'tr' || r.type == :text) && r.children.all? {|c| c.value == type || c.type == :text }}
+            t.children.all? { |r| (r.value == 'tr' || r.type == :text) && r.children.all? { |c| c.value == type || c.type == :text } }
           end
           check_rows.call(el, 'td') ||
             (el.children.all? do |t|
                t.type == :text || (t.value == 'thead' && check_rows.call(t, 'th')) ||
                  ((t.value == 'tfoot' || t.value == 'tbody') && check_rows.call(t, 'td'))
-             end && el.children.any? {|t| t.value == 'tbody' })
+             end && el.children.any? { |t| t.value == 'tbody' })
         end
 
         def convert_script(el)
@@ -570,7 +565,6 @@ module Kramdown
           el.value = el.children.shift.value.sub(/\A(?:%\s*)?<!\[CDATA\[\n?(.*?)(?:\s%)?\]\]>\z/m, '\1')
           el.attr.delete('type')
         end
-
       end
 
       include Parser
@@ -599,10 +593,6 @@ module Kramdown
 
         ElementConverter.convert(@tree)
       end
-
     end
-
   end
-
 end
-

@@ -10,9 +10,7 @@
 require 'kramdown/parser'
 
 module Kramdown
-
   module Parser
-
     # Used for parsing a document in Markdown format.
     #
     # This parser is based on the kramdown parser and removes the parser methods for the additional
@@ -23,7 +21,6 @@ module Kramdown
     # Note, though, that the parser basically fails just one of the Markdown test cases (some others
     # also fail but those failures are negligible).
     class Markdown < Kramdown
-
       # Array with all the parsing methods that should be removed from the standard kramdown parser.
       EXTENDED = [:codeblock_fenced, :table, :definition_list, :footnote_definition,
                   :abbrev_definition, :block_math, :block_extensions,
@@ -31,8 +28,8 @@ module Kramdown
 
       def initialize(source, options) # :nodoc:
         super
-        @block_parsers.delete_if {|i| EXTENDED.include?(i) }
-        @span_parsers.delete_if {|i| EXTENDED.include?(i) }
+        @block_parsers.delete_if { |i| EXTENDED.include?(i) }
+        @span_parsers.delete_if { |i| EXTENDED.include?(i) }
       end
 
       # :stopdoc:
@@ -49,9 +46,6 @@ module Kramdown
       IAL_SPAN_START = LIST_ITEM_IAL
 
       # :startdoc:
-
     end
-
   end
-
 end

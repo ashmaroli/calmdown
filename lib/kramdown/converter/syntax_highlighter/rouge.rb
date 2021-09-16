@@ -8,10 +8,8 @@
 #
 
 module Kramdown::Converter::SyntaxHighlighter
-
   # Uses Rouge which is CSS-compatible to Pygments to highlight code blocks and code spans.
   module Rouge
-
     begin
       require 'rouge'
 
@@ -79,7 +77,5 @@ module Kramdown::Converter::SyntaxHighlighter
       # Fallback to Rouge 1.x
       ::Rouge::Formatters::HTML
     end
-
   end
-
 end

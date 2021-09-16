@@ -12,9 +12,7 @@ require 'kramdown/utils'
 require 'kramdown/document'
 
 module Kramdown
-
   module Converter
-
     # == \Base class for converters
     #
     # This class serves as base class for all converters. It provides methods that can/should be
@@ -38,7 +36,6 @@ module Kramdown
     #
     # Have a look at the Base::convert method for additional information!
     class Base
-
       # Can be used by a converter for storing arbitrary information during the conversion process.
       attr_reader :data
 
@@ -242,16 +239,13 @@ module Kramdown
         gen_id
       end
 
-      SMART_QUOTE_INDICES = {lsquo: 0, rsquo: 1, ldquo: 2, rdquo: 3} # :nodoc:
+      SMART_QUOTE_INDICES = { lsquo: 0, rsquo: 1, ldquo: 2, rdquo: 3 } # :nodoc:
 
       # Return the entity that represents the given smart_quote element.
       def smart_quote_entity(el)
         res = @options[:smart_quotes][SMART_QUOTE_INDICES[el.value]]
         ::Kramdown::Utils::Entities.entity(res)
       end
-
     end
-
   end
-
 end

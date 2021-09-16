@@ -10,7 +10,6 @@
 module Kramdown
   module Parser
     class Kramdown
-
       ESCAPED_CHARS = /\\([\\.*_+`<>()\[\]{}#!:|"'\$=-])/
 
       # Parse the backslash-escaped character at the current location.
@@ -19,7 +18,6 @@ module Kramdown
         add_text(@src[1])
       end
       define_parser(:escaped_chars, ESCAPED_CHARS, '\\\\')
-
     end
   end
 end

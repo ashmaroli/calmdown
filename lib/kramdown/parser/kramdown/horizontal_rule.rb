@@ -10,7 +10,6 @@
 module Kramdown
   module Parser
     class Kramdown
-
       HR_START = /^#{OPT_SPACE}(\*|-|_)[ \t]*\1[ \t]*\1(\1|[ \t])*\n/
 
       # Parse the horizontal rule at the current location.
@@ -21,7 +20,6 @@ module Kramdown
         true
       end
       define_parser(:horizontal_rule, HR_START)
-
     end
   end
 end

@@ -10,7 +10,6 @@
 module Kramdown
   module Parser
     class Kramdown
-
       LINE_BREAK = /(  |\\\\)(?=\n)/
 
       # Parse the line break at the current location.
@@ -19,7 +18,6 @@ module Kramdown
         @src.pos += @src.matched_size
       end
       define_parser(:line_break, LINE_BREAK, '(  |\\\\)(?=\n)')
-
     end
   end
 end

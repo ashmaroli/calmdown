@@ -10,13 +10,13 @@
 module Kramdown
   module Parser
     class Kramdown
-
       IAL_CLASS_ATTR = 'class'
 
       # Parse the string +str+ and extract all attributes and add all found attributes to the hash
       # +opts+.
       def parse_attribute_list(str, opts)
         return if str.strip.empty? || str.strip == ':'
+
         attrs = str.scan(ALD_TYPE_ANY)
         attrs.each do |key, sep, val, ref, id_and_or_class, _, _|
           if ref
@@ -111,7 +111,7 @@ module Kramdown
             k = k.to_sym
             if Kramdown::Options.defined?(k)
               if @options[:forbidden_inline_options].include?(k) ||
-                  k == :forbidden_inline_options
+                 k == :forbidden_inline_options
                 warning("Option #{k} may not be set inline")
                 next false
               end
@@ -170,8 +170,8 @@ module Kramdown
           parse_extension_start_tag(:block)
         elsif @src.scan(IAL_BLOCK_START)
           if (last_child = @tree.children.last) && last_child.type != :blank &&
-              (last_child.type != :eob ||
-               [:link_def, :abbrev_def, :footnote_def].include?(last_child.value))
+             (last_child.type != :eob ||
+              [:link_def, :abbrev_def, :footnote_def].include?(last_child.value))
             parse_attribute_list(@src[1], last_child.options[:ial] ||= {})
             @tree.children << new_block_el(:eob, :ial) unless @src.check(IAL_BLOCK_START)
           else
@@ -208,7 +208,6 @@ module Kramdown
         end
       end
       define_parser(:span_extensions, SPAN_EXTENSIONS_START, '\{:')
-
     end
   end
 end

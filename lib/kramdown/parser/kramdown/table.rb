@@ -12,7 +12,6 @@ require 'kramdown/parser/kramdown/block_boundary'
 module Kramdown
   module Parser
     class Kramdown
-
       TABLE_SEP_LINE = /^([+|: \t-]*?-[+|: \t-]*?)[ \t]*\n/
       TABLE_HSEP_ALIGN = /[ \t]?(:?)-+(:?)[ \t]?/
       TABLE_FSEP_LINE = /^[+|: \t=]*?=[+|: \t=]*?[ \t]*\n/
@@ -45,6 +44,7 @@ module Kramdown
 
         until @src.eos?
           break unless @src.check(TABLE_LINE)
+
           if @src.scan(TABLE_SEP_LINE)
             if rows.empty?
               # nothing to do, ignoring multiple consecutive separator lines
@@ -76,7 +76,7 @@ module Kramdown
 
                 root.children.each do |c|
                   if c.type == :raw_text
-                    f, *l = c.value.split(/(?<!\\)\|/, -1).map {|t| t.gsub(/\\\|/, '|') }
+                    f, *l = c.value.split(/(?<!\\)\|/, -1).map { |t| t.gsub(/\\\|/, '|') }
                     (cells.empty? ? cells : cells.last) << f
                     cells.concat(l)
                   else
@@ -124,6 +124,7 @@ module Kramdown
         pipe_on_line = false
         while (c = root.children.shift)
           next unless (lines = c.value)
+
           lines = lines.split("\n")
           if c.type == :codespan
             if lines.size > 2 || (lines.size == 2 && !pipe_on_line)
@@ -133,6 +134,7 @@ module Kramdown
             end
           else
             break if lines.size > 1 && !pipe_on_line && lines.first !~ /^#{TABLE_PIPE_CHECK}/o
+
             pipe_on_line = (lines.size > 1 ? false : pipe_on_line) || (lines.last =~ /^#{TABLE_PIPE_CHECK}/o)
           end
         end
@@ -140,7 +142,7 @@ module Kramdown
 
         add_container.call(has_footer ? :tfoot : :tbody, false) unless rows.empty?
 
-        if table.children.none? {|el| el.type == :tbody }
+        if table.children.none? { |el| el.type == :tbody }
           warning("Found table without body on line #{table.options[:location]} - ignoring it")
           @src.revert_pos(saved_pos)
           return false
@@ -165,7 +167,6 @@ module Kramdown
         true
       end
       define_parser(:table, TABLE_START)
-
     end
   end
 end

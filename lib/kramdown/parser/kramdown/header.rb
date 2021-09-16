@@ -13,14 +13,15 @@ require 'rexml/xmltokens'
 module Kramdown
   module Parser
     class Kramdown
-
       SETEXT_HEADER_START = /^#{OPT_SPACE}(?<contents>[^ \t].*)\n(?<level>[-=])[-=]*[ \t\r\f\v]*\n/
 
       # Parse the Setext header at the current location.
       def parse_setext_header
         return false unless after_block_boundary?
+
         text, id = parse_header_contents
         return false if text.empty?
+
         add_header(@src["level"] == '-' ? 2 : 1, text, id)
         true
       end
@@ -31,9 +32,11 @@ module Kramdown
       # Parse the Atx header at the current location.
       def parse_atx_header
         return false unless after_block_boundary?
+
         text, id = parse_header_contents
         text.sub!(/(?<!\\)#+\z/, '') && text.rstrip!
         return false if text.empty?
+
         add_header(@src["level"].length, text, id)
         true
       end
@@ -64,7 +67,6 @@ module Kramdown
         el.attr['id'] = id if id
         @tree.children << el
       end
-
     end
   end
 end

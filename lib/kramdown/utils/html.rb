@@ -10,16 +10,13 @@
 require 'rexml/parsers/baseparser'
 
 module Kramdown
-
   module Utils
-
     # Provides convenience methods for HTML related tasks.
     #
     # *Note* that this module has to be mixed into a class that has a @root (containing an element
     # of type :root) and an @options (containing an options hash) instance variable so that some of
     # the methods can work correctly.
     module Html
-
       # Convert the entity +e+ to a string. The optional parameter +original+ may contain the
       # original representation of the entity.
       #
@@ -28,8 +25,8 @@ module Kramdown
         entity_output = @options[:entity_output]
 
         if entity_output == :as_char &&
-            (c = e.char.encode(@root.options[:encoding]) rescue nil) &&
-            ((c = e.char) == '"' || !ESCAPE_MAP.key?(c))
+           (c = e.char.encode(@root.options[:encoding]) rescue nil) &&
+           ((c = e.char) == '"' || !ESCAPE_MAP.key?(c))
           c
         elsif (entity_output == :as_input || entity_output == :as_char) && original
           original
@@ -59,7 +56,7 @@ module Kramdown
       ESCAPE_ALL_RE = /<|>|&/
       ESCAPE_TEXT_RE = Regexp.union(REXML::Parsers::BaseParser::REFERENCE_RE, /<|>|&/)
       ESCAPE_ATTRIBUTE_RE = Regexp.union(REXML::Parsers::BaseParser::REFERENCE_RE, /<|>|&|"/)
-      ESCAPE_RE_FROM_TYPE = {all: ESCAPE_ALL_RE, text: ESCAPE_TEXT_RE, attribute: ESCAPE_ATTRIBUTE_RE}
+      ESCAPE_RE_FROM_TYPE = { all: ESCAPE_ALL_RE, text: ESCAPE_TEXT_RE, attribute: ESCAPE_ATTRIBUTE_RE }
       # :startdoc:
 
       # Escape the special HTML characters in the string +str+. The parameter +type+ specifies what
@@ -67,7 +64,7 @@ module Kramdown
       # entities, :text - all special HTML characters except the quotation mark but no entities and
       # :attribute - all special HTML characters including the quotation mark but no entities.
       def escape_html(str, type = :all)
-        str.gsub(ESCAPE_RE_FROM_TYPE[type]) {|m| ESCAPE_MAP[m] || m }
+        str.gsub(ESCAPE_RE_FROM_TYPE[type]) { |m| ESCAPE_MAP[m] || m }
       end
 
       REDUNDANT_LINE_BREAK_REGEX = /([\p{Han}\p{Hiragana}\p{Katakana}]+)\n([\p{Han}\p{Hiragana}\p{Katakana}]+)/u
@@ -76,9 +73,6 @@ module Kramdown
         end
         str
       end
-
     end
-
   end
-
 end

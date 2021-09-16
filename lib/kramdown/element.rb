@@ -8,7 +8,6 @@
 #
 
 module Kramdown
-
   # Represents all elements in the element tree.
   #
   # kramdown only uses this one class for representing all available elements in an element tree
@@ -480,7 +479,6 @@ module Kramdown
   # is valid.
   #
   class Element
-
     # A symbol representing the element type. For example, :p or :blockquote.
     attr_accessor :type
 
@@ -518,9 +516,9 @@ module Kramdown
 
     CATEGORY = {} # :nodoc:
     [:blank, :p, :header, :blockquote, :codeblock, :ul, :ol, :li, :dl, :dt, :dd,
-     :table, :td, :hr].each {|b| CATEGORY[b] = :block }
+     :table, :td, :hr].each { |b| CATEGORY[b] = :block }
     [:text, :a, :br, :img, :codespan, :footnote, :em, :strong, :entity, :typographic_sym,
-     :smart_quote, :abbreviation].each {|b| CATEGORY[b] = :span }
+     :smart_quote, :abbreviation].each { |b| CATEGORY[b] = :span }
 
     # Return the category of +el+ which can be :block, :span or +nil+.
     #
@@ -545,7 +543,5 @@ module Kramdown
     def span?
       (CATEGORY[type] || options[:category]) == :span
     end
-
   end
-
 end

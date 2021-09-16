@@ -11,11 +11,9 @@ require 'strscan'
 
 module Kramdown
   module Utils
-
     # This patched StringScanner adds line number information for current scan position and a
     # start_line_number override for nested StringScanners.
     class StringScanner < ::StringScanner
-
       # The start line number. Used for nested StringScanners that scan a sub-string of the source
       # document. The kramdown parser uses this, e.g., for span level parsers.
       attr_reader :start_line_number
@@ -74,8 +72,6 @@ module Kramdown
         @previous_pos = (eos? ? pos : pos + 1)
         @previous_line_number
       end
-
     end
-
   end
 end

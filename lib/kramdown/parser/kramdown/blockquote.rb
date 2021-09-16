@@ -14,7 +14,6 @@ require 'kramdown/parser/kramdown/eob'
 module Kramdown
   module Parser
     class Kramdown
-
       BLOCKQUOTE_START = /^#{OPT_SPACE}> ?/
 
       # Parse the blockquote at the current location.
@@ -32,7 +31,6 @@ module Kramdown
         true
       end
       define_parser(:blockquote, BLOCKQUOTE_START)
-
     end
   end
 end

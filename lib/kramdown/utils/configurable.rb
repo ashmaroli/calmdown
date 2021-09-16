@@ -9,10 +9,8 @@
 
 module Kramdown
   module Utils
-
     # Methods for registering configurable extensions.
     module Configurable
-
       # Create a new configurable extension called +name+.
       #
       # Three methods will be defined on the calling object which allow to use this configurable
@@ -28,7 +26,7 @@ module Kramdown
       def configurable(name)
         unless respond_to?(:configurables)
           singleton_class.send(:define_method, :configurables) do
-            @_configurables ||= Hash.new {|h, k| h[k] = {} }
+            @_configurables ||= Hash.new { |h, k| h[k] = {} }
           end
         end
         singleton_class.send(:define_method, name) do |data|
@@ -38,8 +36,6 @@ module Kramdown
           configurables[name][data] = args.first || block
         end
       end
-
     end
-
   end
 end

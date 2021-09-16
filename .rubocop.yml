@@ -1,0 +1,18 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 2.5
+  SuggestExtensions: false
+  NewCops: enable
+  Exclude:
+    - test/**/*.rb
+    - vendor/**/*
+
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: always

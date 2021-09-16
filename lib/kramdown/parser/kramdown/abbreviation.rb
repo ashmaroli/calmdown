@@ -10,7 +10,6 @@
 module Kramdown
   module Parser
     class Kramdown
-
       ABBREV_DEFINITION_START = /^#{OPT_SPACE}\*\[(.+?)\]:(.*?)\n/
 
       # Parse the link definition at the current location.
@@ -40,9 +39,10 @@ module Kramdown
       # Replace the abbreviation text with elements.
       def replace_abbreviations(el, regexps = nil)
         return if @root.options[:abbrev_defs].empty?
+
         unless regexps
-          sorted_abbrevs = @root.options[:abbrev_defs].keys.sort {|a, b| b.length <=> a.length }
-          regexps = [Regexp.union(*sorted_abbrevs.map {|k| /#{Regexp.escape(k)}/ })]
+          sorted_abbrevs = @root.options[:abbrev_defs].keys.sort { |a, b| b.length <=> a.length }
+          regexps = [Regexp.union(*sorted_abbrevs.map { |k| /#{Regexp.escape(k)}/ })]
           regexps << /(?=(?:\W|^)#{regexps.first}(?!\w))/ # regexp should only match on word boundaries
         end
         el.children.map! do |child|
@@ -72,7 +72,6 @@ module Kramdown
           end
         end.flatten!
       end
-
     end
   end
 end

@@ -10,24 +10,22 @@
 require 'kramdown/converter'
 
 module Kramdown
-
   module Converter
-
     # Converts a Kramdown::Document to a manpage in groff format. See man(7), groff_man(7) and
     # man-pages(7) for information regarding the output.
     class Man < Base
-
-      def convert(el, opts = {indent: 0, result: +''}) #:nodoc:
+      def convert(el, opts = { indent: 0, result: +'' }) #:nodoc:
         send("convert_#{el.type}", el, opts)
       end
 
       private
 
       def inner(el, opts, use = :all)
-        arr = el.children.reject {|e| e.type == :blank }
+        arr = el.children.reject { |e| e.type == :blank }
         arr.each_with_index do |inner_el, index|
-          next if use == :rest && index == 0
+          next  if use == :rest  && index == 0
           break if use == :first && index > 0
+
           options = opts.dup
           options[:parent] = el
           options[:index] = index
@@ -51,7 +49,7 @@ module Kramdown
 
       def convert_p(el, opts)
         if (opts[:index] != 0 && opts[:prev].type != :header) ||
-            (opts[:parent].type == :blockquote && opts[:index] == 0)
+           (opts[:parent].type == :blockquote && opts[:index] == 0)
           opts[:result] << macro("P")
         end
         inner(el, opts)
@@ -60,13 +58,15 @@ module Kramdown
 
       def convert_header(el, opts)
         return unless opts[:parent].type == :root
+
         case el.options[:level]
         when 1
           unless @title_done
             @title_done = true
             data = el.options[:raw_text].scan(/([^(]+)\s*\((\d\w*)\)(?:\s*-+\s*(.*))?/).first ||
-              el.options[:raw_text].scan(/([^\s]+)\s*(?:-*\s+)?()(.*)/).first
+                   el.options[:raw_text].scan(/([^\s]+)\s*(?:-*\s+)?()(.*)/).first
             return unless data && data[0]
+
             name = data[0]
             section = (data[1].to_s.empty? ? el.attr['data-section'] || '7' : data[1])
             description = (data[2].to_s.empty? ? nil : " - #{data[2]}")
@@ -134,10 +134,10 @@ module Kramdown
         opts[:result] << macro("sp") if opts[:next] && opts[:next].type == :dd
       end
 
-      TABLE_CELL_ALIGNMENT = {left: 'l', center: 'c', right: 'r', default: 'l'}
+      TABLE_CELL_ALIGNMENT = { left: 'l', center: 'c', right: 'r', default: 'l' }
 
       def convert_table(el, opts)
-        opts[:alignment] = el.options[:alignment].map {|a| TABLE_CELL_ALIGNMENT[a] }
+        opts[:alignment] = el.options[:alignment].map { |a| TABLE_CELL_ALIGNMENT[a] }
         table_options = ["box"]
         table_options << "center" if el.attr['class'] =~ /\bcenter\b/
         opts[:result] << macro("TS") << "#{table_options.join(' ')} ;\n"
@@ -146,7 +146,7 @@ module Kramdown
       end
 
       def convert_thead(el, opts)
-        opts[:result] << opts[:alignment].map {|a| "#{a}b" }.join(' ') << " .\n"
+        opts[:result] << opts[:alignment].map { |a| "#{a}b" }.join(' ') << " .\n"
         inner(el, opts)
         opts[:result] << "=\n"
       end
@@ -190,7 +190,7 @@ module Kramdown
 
       def convert_a(el, opts)
         if el.children.size == 1 && el.children[0].type == :text &&
-            el.attr['href'] == el.children[0].value
+           el.attr['href'] == el.children[0].value
           newline(opts[:result]) << macro("UR", escape(el.attr['href'])) << macro("UE")
         elsif el.attr['href'].start_with?('mailto:')
           newline(opts[:result]) << macro("MT", escape(el.attr['href'].sub(/^mailto:/, ''))) <<
@@ -286,15 +286,13 @@ module Kramdown
         text = (preserve_whitespace ? text.dup : text.gsub(/\s+/, ' '))
         text.gsub!('\\', "\\e")
         text.gsub!(/^\./, '\\\\&.')
-        text.gsub!(/[.'-]/) {|m| "\\#{m}" }
+        text.gsub!(/[.'-]/) { |m| "\\#{m}" }
         text
       end
 
       def unicode_char(codepoint)
         "\\[u#{codepoint.to_s(16).rjust(4, '0')}]"
       end
-
     end
-
   end
 end

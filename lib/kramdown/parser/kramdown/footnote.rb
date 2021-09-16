@@ -14,7 +14,6 @@ require 'kramdown/parser/kramdown/codeblock'
 module Kramdown
   module Parser
     class Kramdown
-
       FOOTNOTE_DEFINITION_START = /^#{OPT_SPACE}\[\^(#{ALD_ID_NAME})\]:\s*?(.*?\n#{CODEBLOCK_MATCH})/
 
       # Parse the foot note definition at the current location.
@@ -58,7 +57,6 @@ module Kramdown
         end
       end
       define_parser(:footnote_marker, FOOTNOTE_MARKER_START, '\[')
-
     end
   end
 end

@@ -12,7 +12,6 @@ require 'kramdown/parser/kramdown/escaped_chars'
 module Kramdown
   module Parser
     class Kramdown
-
       # Normalize the link identifier.
       def normalize_link_id(id)
         id.gsub(/[\s]+/, ' ').downcase
@@ -23,6 +22,7 @@ module Kramdown
       # Parse the link definition at the current location.
       def parse_link_definition
         return false if @src[3].to_s =~ /[ \t]+["']/
+
         @src.pos += @src.matched_size
         link_id, link_url, link_title = normalize_link_id(@src[1]), @src[2] || @src[3], @src[5]
         if @link_defs[link_id]
@@ -68,7 +68,7 @@ module Kramdown
 
         # no nested links allowed
         if link_type == :a && (@tree.type == :img || @tree.type == :a ||
-                               @stack.any? {|t, _| t && (t.type == :img || t.type == :a) })
+                               @stack.any? { |t, _| t && (t.type == :img || t.type == :a) })
           add_text(result)
           return
         end
@@ -77,7 +77,7 @@ module Kramdown
         count = 1
         found = parse_spans(el, LINK_BRACKET_STOP_RE) do
           count += (@src[1] ? -1 : 1)
-          count - el.children.select {|c| c.type == :img }.size == 0
+          count - el.children.select { |c| c.type == :img }.size == 0
         end
         unless found
           @src.revert_pos(saved_pos)
@@ -143,7 +143,6 @@ module Kramdown
         end
       end
       define_parser(:link, LINK_START, '!?\[')
-
     end
   end
 end

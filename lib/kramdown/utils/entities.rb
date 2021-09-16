@@ -8,12 +8,9 @@
 #
 
 module Kramdown
-
   module Utils
-
     # Provides convenience methods for handling named and numeric entities.
     module Entities
-
       # Represents an entity that has a +code_point+ and +name+.
       Entity = Struct.new(:code_point, :name) do
         # Return the UTF8 representation of the entity.
@@ -336,9 +333,6 @@ module Kramdown
       end
 
       module_function :entity
-
     end
-
   end
-
 end
