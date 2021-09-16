@@ -64,14 +64,14 @@ module Kramdown
       # Pushes +el+ onto the @stack before converting the child elements and pops it from the stack
       # afterwards.
       def inner(el, indent)
-        result = +''
+        result = []
         indent += @indent
         @stack.push(el)
         el.children.each do |inner_el|
           result << send(@dispatcher[inner_el.type], inner_el, indent)
         end
         @stack.pop
-        result
+        result.join
       end
 
       def convert_blank(_el, _indent)
