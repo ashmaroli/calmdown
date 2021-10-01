@@ -81,7 +81,7 @@ module Kramdown
         # body - and the end tag - need to be handled in case closed=false).
         def handle_html_start_tag(line = nil) # :yields: el, closed, handle_body
           name = @src[1]
-          name.downcase! if HTML_ELEMENT[name.downcase]
+          name.downcase! if !HTML_ELEMENT[name] && HTML_ELEMENT[name.downcase]
           closed = !@src[4].nil?
           attrs = parse_html_attributes(@src[2], line, HTML_ELEMENT[name])
 
