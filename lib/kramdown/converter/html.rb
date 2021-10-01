@@ -179,7 +179,7 @@ module Kramdown
         output = ' ' * indent << "<#{el.type}" << html_attributes(el.attr) << ">"
         res = inner(el, indent)
         if el.children.empty? || (el.children.first.type == :p && el.children.first.options[:transparent])
-          output << res << (res =~ /\n\Z/ ? ' ' * indent : '')
+          output << res << (/\n\Z/.match?(res) ? ' ' * indent : '')
         else
           output << "\n" << res << ' ' * indent
         end

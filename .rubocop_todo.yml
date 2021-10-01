@@ -155,20 +155,6 @@ Performance/RedundantSplitRegexpArgument:
     - 'lib/kramdown/options.rb'
     - 'lib/kramdown/parser/kramdown/list.rb'
 
-# Offense count: 13
-# Cop supports --auto-correct.
-Performance/RegexpMatch:
-  Exclude:
-    - 'lib/kramdown/converter/html.rb'
-    - 'lib/kramdown/converter/kramdown.rb'
-    - 'lib/kramdown/converter/latex.rb'
-    - 'lib/kramdown/converter/man.rb'
-    - 'lib/kramdown/options.rb'
-    - 'lib/kramdown/parser/html.rb'
-    - 'lib/kramdown/parser/kramdown/abbreviation.rb'
-    - 'lib/kramdown/parser/kramdown/link.rb'
-    - 'lib/kramdown/parser/kramdown/list.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect.

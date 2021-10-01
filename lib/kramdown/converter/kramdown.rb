@@ -359,7 +359,7 @@ module Kramdown
       end
 
       def convert_smart_quote(el, _opts)
-        el.value.to_s =~ /[rl]dquo/ ? "\"" : "'"
+        /[rl]dquo/.match?(el.value.to_s) ? "\"" : "'"
       end
 
       def convert_math(el, _opts)

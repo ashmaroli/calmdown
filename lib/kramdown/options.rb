@@ -351,7 +351,7 @@ module Kramdown
       when String
         if val =~ /^(\d)\.\.(\d)$/
           val = Range.new($1.to_i, $2.to_i).to_a
-        elsif val =~ /^\d(?:,\d)*$/
+        elsif /^\d(?:,\d)*$/.match?(val)
           val = val.split(/,/).map(&:to_i).uniq
         else
           raise Kramdown::Error, "Invalid syntax for option toc_levels"

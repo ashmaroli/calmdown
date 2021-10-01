@@ -29,7 +29,7 @@ module Kramdown
       # Used for parsing the first line of a list item or a definition, i.e. the line with list item
       # marker or the definition marker.
       def parse_first_list_line(indentation, content)
-        if content =~ self.class::LIST_ITEM_IAL_CHECK
+        if self.class::LIST_ITEM_IAL_CHECK.match?(content)
           indentation = 4
         else
           while content =~ /^ *\t/

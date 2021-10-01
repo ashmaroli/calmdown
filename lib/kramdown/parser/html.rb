@@ -565,7 +565,7 @@ module Kramdown
         end
 
         def handle_math_tag(el)
-          set_basics(el, :math, category: (el.attr['type'] =~ /mode=display/ ? :block : :span))
+          set_basics(el, :math, category: (/mode=display/.match?(el.attr['type']) ? :block : :span))
           el.value = el.children.shift.value.sub(/\A(?:%\s*)?<!\[CDATA\[\n?(.*?)(?:\s%)?\]\]>\z/m, '\1')
           el.attr.delete('type')
         end
