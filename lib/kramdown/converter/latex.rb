@@ -161,7 +161,7 @@ module Kramdown
       end
 
       def convert_xml_comment(el, _opts)
-        el.value.split(/\n/).map { |l| "% #{l}" }.join("\n") + "\n"
+        el.value.split("\n").map { |l| "% #{l}" }.join("\n") + "\n"
       end
 
       def convert_xml_pi(_el, _opts)
@@ -200,7 +200,7 @@ module Kramdown
       end
 
       def convert_comment(el, _opts)
-        el.value.split(/\n/).map { |l| "% #{l}" }.join("\n") << "\n"
+        el.value.split("\n").map { |l| "% #{l}" }.join("\n") << "\n"
       end
 
       def convert_br(_el, opts)

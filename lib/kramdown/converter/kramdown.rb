@@ -80,7 +80,7 @@ module Kramdown
 
       def convert_p(el, opts)
         w = @options[:line_width] - opts[:indent].to_s.to_i
-        first, second, *rest = inner(el, opts).strip.gsub(/(.{1,#{w}})( +|$\n?)/, "\\1\n").split(/\n/)
+        first, second, *rest = inner(el, opts).strip.gsub(/(.{1,#{w}})( +|$\n?)/, "\\1\n").split("\n")
         first&.gsub!(/^(?:(#|>)|(\d+)\.|([+-]\s))/) { $1 || $3 ? "\\#{$1 || $3}" : "#{$2}\\." }
         second&.gsub!(/^([=-]+\s*?)$/, "\\\1")
         res = [first, second, *rest].compact.join("\n") + "\n"
@@ -93,12 +93,12 @@ module Kramdown
       end
 
       def convert_codeblock(el, _opts)
-        el.value.split(/\n/).map { |l| l.empty? ? "    " : "    #{l}" }.join("\n") + "\n"
+        el.value.split("\n").map { |l| l.empty? ? "    " : "    #{l}" }.join("\n") + "\n"
       end
 
       def convert_blockquote(el, opts)
         opts[:indent] += 2
-        inner(el, opts).chomp.split(/\n/).map { |l| "> #{l}" }.join("\n") << "\n"
+        inner(el, opts).chomp.split("\n").map { |l| "> #{l}" }.join("\n") << "\n"
       end
 
       def convert_header(el, opts)
@@ -132,7 +132,7 @@ module Kramdown
         opts[:indent] += width
         text = inner(el, opts)
         newlines = text.scan(/\n*\Z/).first
-        first, *last = text.split(/\n/)
+        first, *last = text.split("\n")
         last = last.map { |l| " " * width + l }.join("\n")
         text = (first.nil? ? "\n" : first + (last.empty? ? "" : "\n") + last + newlines)
         if el.children.first && el.children.first.type == :p && !el.children.first.options[:transparent]
@@ -156,7 +156,7 @@ module Kramdown
         opts[:indent] += width
         text = inner(el, opts)
         newlines = text.scan(/\n*\Z/).first
-        first, *last = text.split(/\n/)
+        first, *last = text.split("\n")
         last = last.map { |l| " " * width + l }.join("\n")
         text = first.to_s + (last.empty? ? "" : "\n") + last + newlines
         text.chomp! if text =~ /\n\n\Z/ && opts[:next] && opts[:next].type == :dd
@@ -392,7 +392,7 @@ module Kramdown
         res = +''
         @footnotes.each do |name, data|
           res << "[^#{name}]:\n"
-          res << inner(data).chomp.split(/\n/).map { |l| "    #{l}" }.join("\n") + "\n\n"
+          res << inner(data).chomp.split("\n").map { |l| "    #{l}" }.join("\n") + "\n\n"
         end
         res
       end

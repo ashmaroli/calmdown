@@ -134,7 +134,7 @@ module Kramdown
 
       # Return the template specified by +template+.
       def self.get_template(template) # :nodoc:
-        format_ext = '.' + ::Kramdown::Utils.snake_case(self.name.split(/::/).last)
+        format_ext = '.' + ::Kramdown::Utils.snake_case(self.name.split("::").last)
         shipped = File.join(::Kramdown.data_dir, template + format_ext)
         if File.exist?(template)
           File.read(template)

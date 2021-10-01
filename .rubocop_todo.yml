@@ -145,16 +145,6 @@ Performance/RedundantEqualityComparisonBlock:
   Exclude:
     - 'lib/kramdown/converter/kramdown.rb'
 
-# Offense count: 12
-# Cop supports --auto-correct.
-Performance/RedundantSplitRegexpArgument:
-  Exclude:
-    - 'lib/kramdown/converter/base.rb'
-    - 'lib/kramdown/converter/kramdown.rb'
-    - 'lib/kramdown/converter/latex.rb'
-    - 'lib/kramdown/options.rb'
-    - 'lib/kramdown/parser/kramdown/list.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect.
