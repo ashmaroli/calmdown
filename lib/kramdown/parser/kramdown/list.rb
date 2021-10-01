@@ -29,7 +29,7 @@ module Kramdown
       # Used for parsing the first line of a list item or a definition, i.e. the line with list item
       # marker or the definition marker.
       def parse_first_list_line(indentation, content)
-        if content =~ self.class::LIST_ITEM_IAL_CHECK
+        if self.class::LIST_ITEM_IAL_CHECK.match?(content)
           indentation = 4
         else
           while content =~ /^ *\t/
@@ -165,7 +165,7 @@ module Kramdown
         end
         # take location from preceding para which is the first definition term
         deflist.options[:location] = para.options[:location]
-        para.children.first.value.split(/\n/).each do |term|
+        para.children.first.value.split("\n").each do |term|
           el = Element.new(:dt, nil, nil, location: @src.current_line_number)
           term.sub!(self.class::LIST_ITEM_IAL) do
             parse_attribute_list($1, el.options[:ial] ||= {})
