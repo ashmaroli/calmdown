@@ -21,7 +21,7 @@ module Kramdown
 
       # Parse the link definition at the current location.
       def parse_link_definition
-        return false if @src[3].to_s =~ /[ \t]+["']/
+        return false if /[ \t]+["']/.match?(@src[3].to_s)
 
         @src.pos += @src.matched_size
         link_id, link_url, link_title = normalize_link_id(@src[1]), @src[2] || @src[3], @src[5]
@@ -64,7 +64,7 @@ module Kramdown
         cur_pos = @src.pos
         saved_pos = @src.save_pos
 
-        link_type = (result =~ /^!/ ? :img : :a)
+        link_type = (/^!/.match?(result) ? :img : :a)
 
         # no nested links allowed
         if link_type == :a && (@tree.type == :img || @tree.type == :a ||

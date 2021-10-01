@@ -179,7 +179,7 @@ module Kramdown
         output = ' ' * indent << "<#{el.type}" << html_attributes(el.attr) << ">"
         res = inner(el, indent)
         if el.children.empty? || (el.children.first.type == :p && el.children.first.options[:transparent])
-          output << res << (res =~ /\n\Z/ ? ' ' * indent : '')
+          output << res << (/\n\Z/.match?(res) ? ' ' * indent : '')
         else
           output << "\n" << res << ' ' * indent
         end
@@ -484,12 +484,16 @@ module Kramdown
 
       FOOTNOTE_BACKLINK_FMT = "%s<a href=\"#fnref:%s\" class=\"reversefootnote\" role=\"doc-backlink\">%s</a>"
 
+      FOOTNOTE_TYPE_LIST = [:p, :header].freeze
+      private_constant :FOOTNOTE_TYPE_LIST
+
       # Return an HTML ordered list with the footnote content for the used footnotes.
       def footnote_content
         ol = Element.new(:ol)
         ol.attr['start'] = @footnote_start if @footnote_start != 1
         i = 0
         backlink_text = escape_html(@options[:footnote_backlink], :text)
+
         while i < @footnotes.length
           name, data, _, repeat = *@footnotes[i]
           li = Element.new(:li, nil, 'id' => "fn:#{name}", 'role' => 'doc-endnote')
@@ -498,7 +502,7 @@ module Kramdown
           para = nil
           if li.children.last.type == :p || @options[:footnote_backlink_inline]
             parent = li
-            while !parent.children.empty? && ![:p, :header].include?(parent.children.last.type)
+            while !parent.children.empty? && !FOOTNOTE_TYPE_LIST.include?(parent.children.last.type)
               parent = parent.children.last
             end
             para = parent.children.last

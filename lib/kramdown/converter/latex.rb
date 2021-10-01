@@ -56,7 +56,7 @@ module Kramdown
       end
 
       def convert_blank(_el, opts)
-        opts[:result] =~ /\n\n\Z|\A\Z/ ? "" : "\n"
+        /\n\n\Z|\A\Z/.match?(opts[:result]) ? "" : "\n"
       end
 
       def convert_text(el, _opts)
@@ -161,7 +161,7 @@ module Kramdown
       end
 
       def convert_xml_comment(el, _opts)
-        el.value.split(/\n/).map { |l| "% #{l}" }.join("\n") + "\n"
+        el.value.split("\n").map { |l| "% #{l}" }.join("\n") + "\n"
       end
 
       def convert_xml_pi(_el, _opts)
@@ -200,7 +200,7 @@ module Kramdown
       end
 
       def convert_comment(el, _opts)
-        el.value.split(/\n/).map { |l| "% #{l}" }.join("\n") << "\n"
+        el.value.split("\n").map { |l| "% #{l}" }.join("\n") << "\n"
       end
 
       def convert_br(_el, opts)
@@ -221,7 +221,7 @@ module Kramdown
 
       def convert_img(el, _opts)
         line = el.options[:location]
-        if el.attr['src'] =~ /^(https?|ftps?):\/\//
+        if /^(https?|ftps?):\/\//.match?(el.attr['src'])
           warning("Cannot include non-local image#{line ? " (line #{line})" : ''}")
           ''
         elsif !el.attr['src'].empty?
@@ -553,7 +553,7 @@ module Kramdown
       def convert_math(el, _opts)
         @data[:packages] += %w[amssymb amsmath amsthm amsfonts]
         if el.options[:category] == :block
-          if el.value =~ /\A\s*\\begin\{/
+          if /\A\s*\\begin\{/.match?(el.value)
             el.value
           else
             latex_environment('displaymath', el, el.value)

@@ -138,7 +138,7 @@ module Kramdown
     # Optionally, the array is checked for the correct size.
     def self.simple_array_validator(val, name, size = nil)
       if String === val
-        val = val.split(/,/)
+        val = val.split(",")
       elsif !(Array === val)
         raise Kramdown::Error, "Invalid type #{val.class} for option #{name}"
       end
@@ -351,8 +351,8 @@ module Kramdown
       when String
         if val =~ /^(\d)\.\.(\d)$/
           val = Range.new($1.to_i, $2.to_i).to_a
-        elsif val =~ /^\d(?:,\d)*$/
-          val = val.split(/,/).map(&:to_i).uniq
+        elsif /^\d(?:,\d)*$/.match?(val)
+          val = val.split(",").map(&:to_i).uniq
         else
           raise Kramdown::Error, "Invalid syntax for option toc_levels"
         end
