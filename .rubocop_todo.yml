@@ -134,13 +134,6 @@ Performance/Count:
     - 'lib/kramdown/parser/html.rb'
     - 'lib/kramdown/parser/kramdown/link.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: SafeMultiline.
-Performance/DeletePrefix:
-  Exclude:
-    - 'lib/kramdown/converter/base.rb'
-
 # Offense count: 2
 Performance/MethodObjectAsBlock:
   Exclude:

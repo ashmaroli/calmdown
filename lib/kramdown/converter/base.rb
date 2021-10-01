@@ -143,7 +143,7 @@ module Kramdown
         elsif File.exist?(shipped)
           File.read(shipped)
         elsif template.start_with?('string://')
-          template.sub(/\Astring:\/\//, '')
+          template.delete_prefix('string://')
         else
           raise "The specified template file #{template} does not exist"
         end
