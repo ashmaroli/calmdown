@@ -179,7 +179,7 @@ module Kramdown
         output = ' ' * indent << "<#{el.type}" << html_attributes(el.attr) << ">"
         res = inner(el, indent)
         if el.children.empty? || (el.children.first.type == :p && el.children.first.options[:transparent])
-          output << res << (res =~ /\n\Z/ ? ' ' * indent : '')
+          output << res << (/\n\Z/.match?(res) ? ' ' * indent : '')
         else
           output << "\n" << res << ' ' * indent
         end
@@ -200,35 +200,29 @@ module Kramdown
 
       def convert_html_element(el, indent)
         res = inner(el, indent)
-        output = []
-
         if el.options[:category] == :span
-          output << '<' << el.value << html_attributes(el.attr)
-          if res.empty? && HTML_ELEMENTS_WITHOUT_BODY.include?(el.value)
-            output << ' />'
-          else
-            output << '>' << res << '</' << el.value << '>'
-          end
+          "<#{el.value}#{html_attributes(el.attr)}" + \
+            (res.empty? && HTML_ELEMENTS_WITHOUT_BODY.include?(el.value) ? " />" : ">#{res}</#{el.value}>")
         else
+          output = +''
           if @stack.last.type != :html_element || @stack.last.options[:content_model] != :raw
             output << ' ' * indent
           end
-          output << '<' << el.value << html_attributes(el.attr)
+          output << "<#{el.value}#{html_attributes(el.attr)}"
           if el.options[:is_closed] && el.options[:content_model] == :raw
             output << " />"
           elsif !res.empty? && el.options[:content_model] != :block
-            output << '>' << res << '</' << el.value << '>'
+            output << ">#{res}</#{el.value}>"
           elsif !res.empty?
-            output << ">\n" << res.chomp << "\n" << ' ' * indent << '</' << el.value << '>'
+            output << ">\n#{res.chomp}\n" << ' ' * indent << "</#{el.value}>"
           elsif HTML_ELEMENTS_WITHOUT_BODY.include?(el.value)
             output << " />"
           else
-            output << '></' << el.value << '>'
+            output << "></#{el.value}>"
           end
           output << "\n" if @stack.last.type != :html_element || @stack.last.options[:content_model] != :raw
+          output
         end
-
-        output.join
       end
 
       def convert_xml_comment(el, indent)
