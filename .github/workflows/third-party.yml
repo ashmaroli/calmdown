@@ -1,9 +1,6 @@
 name: Third-Party Repository Profiling
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
@@ -45,4 +42,59 @@ jobs:
         bundle exec jekyll build -s sandbox -d sandbox/_site --trace
         bundle exec jekyll build -s sandbox -d sandbox/_site --trace
     - name: Memory Analysis of Jekyll Build
-      run: bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb sandbox
+      run: bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb
+
+  diff_profiles:
+    name: "Third-Party Repo Profile Diffs (Ruby ${{ matrix.ruby_version }})"
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby_version:
+        - 2.5
+        - 2.7
+    env:
+      BUNDLE_GEMFILE: "sandbox/Gemfile"
+      BUNDLE_PATH: "vendor/bundle"
+      BUNDLE_JOBS: 4
+      BUNDLE_RETRY: 3
+    steps:
+    - name: Checkout Repository @ ref
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
+        path: calmdown
+    - name: Checkout Repository @ master
+      uses: actions/checkout@v2
+      with:
+        repository: ashmaroli/calmdown
+        ref: master
+        fetch-depth: 3
+        path: master
+    - name: Checkout Third-Party Jekyll Project Repository
+      uses: actions/checkout@v2
+      with:
+        repository: ashmaroli/tomjoht.github.io
+        ref: calmdown
+        path: sandbox
+    - name: "Set up Ruby ${{ matrix.ruby_version }}"
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby_version }}
+        bundler-cache: true
+    - name: Memory Analysis of Jekyll Build with master
+      env:
+        KD_PTH: "../master"
+      run: |
+        bundle install
+        echo
+        bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb master
+    - name: Memory Analysis of Jekyll Build with ref
+      env:
+        KD_PTH: "../calmdown"
+      run: |
+        bundle install
+        echo
+        bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb sandbox
+    - name: Diff two profile reports
+      run: bash calmdown/.github/workflows/scripts/diff-builds master/memprof.txt sandbox/memprof.txt
