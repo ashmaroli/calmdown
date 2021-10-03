@@ -1,14 +1,11 @@
 name: Third-Party Repository Profiling
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
 jobs:
-  build_n_profile:
+  diff_profiles:
     name: "Third-Party Repo Profile (Ruby ${{ matrix.ruby_version }})"
     runs-on: "ubuntu-latest"
     strategy:
@@ -23,11 +20,18 @@ jobs:
       BUNDLE_JOBS: 4
       BUNDLE_RETRY: 3
     steps:
-    - name: Checkout Repository
+    - name: Checkout Repository @ ref
       uses: actions/checkout@v2
       with:
         fetch-depth: 3
         path: calmdown
+    - name: Checkout Repository @ master
+      uses: actions/checkout@v2
+      with:
+        repository: ashmaroli/calmdown
+        ref: master
+        fetch-depth: 3
+        path: master
     - name: Checkout Third-Party Jekyll Project Repository
       uses: actions/checkout@v2
       with:
@@ -39,10 +43,38 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby_version }}
         bundler-cache: true
-    - name: Run Jekyll Build 3 times
+    - name: Run Jekyll Build 3 times with master
+      env:
+        KD_PATH: "../master"
       run: |
-        bundle exec jekyll build -s sandbox -d sandbox/_site --trace
-        bundle exec jekyll build -s sandbox -d sandbox/_site --trace
-        bundle exec jekyll build -s sandbox -d sandbox/_site --trace
-    - name: Memory Analysis of Jekyll Build
-      run: bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb sandbox
+        bundle install --quiet
+        bundle exec jekyll build -s sandbox -d sandbox/_site --trace >> master_build.txt
+        bundle exec jekyll build -s sandbox -d sandbox/_site --trace >> master_build.txt
+        bundle exec jekyll build -s sandbox -d sandbox/_site --trace >> master_build.txt
+    - name: Memory Analysis of Jekyll Build with master
+      env:
+        KD_PATH: "../master"
+      run: |
+        bundle install --quiet
+        echo
+        bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb master
+    - name: Run Jekyll Build 3 times with ref
+      env:
+        KD_PATH: "../calmdown"
+      run: |
+        bundle install --quiet
+        bundle exec jekyll build -s sandbox -d sandbox/_site --trace >> ref_build.txt
+        bundle exec jekyll build -s sandbox -d sandbox/_site --trace >> ref_build.txt
+        bundle exec jekyll build -s sandbox -d sandbox/_site --trace >> ref_build.txt
+    - name: Memory Analysis of Jekyll Build with ref
+      env:
+        KD_PATH: "../calmdown"
+      run: |
+        bundle install --quiet
+        echo
+        bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb sandbox
+    - name: Diff two profile reports
+      run: |
+        bash calmdown/.github/workflows/scripts/diff-builds master_build.txt ref_build.txt
+        echo
+        bash calmdown/.github/workflows/scripts/diff-builds master/memprof.txt sandbox/memprof.txt
