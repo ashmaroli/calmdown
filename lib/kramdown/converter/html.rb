@@ -176,15 +176,14 @@ module Kramdown
       end
 
       def convert_li(el, indent)
-        output = [] << ' ' * indent << '<' << el.type << html_attributes(el.attr) << ">"
+        output = ' ' * indent << "<#{el.type}" << html_attributes(el.attr) << ">"
         res = inner(el, indent)
         if el.children.empty? || (el.children.first.type == :p && el.children.first.options[:transparent])
-          output << res << (/\n\Z/.match?(res) ? ' ' * indent : '')
+          output << res << (res =~ /\n\Z/ ? ' ' * indent : '')
         else
           output << "\n" << res << ' ' * indent
         end
-        output << '</' << el.type << ">\n"
-        output.join
+        output << "</#{el.type}>\n"
       end
       alias convert_dd convert_li
 
