@@ -41,11 +41,9 @@ jobs:
         bundle exec jekyll build -s sandbox -d sandbox/_site --trace
         bundle exec jekyll build -s sandbox -d sandbox/_site --trace
         bundle exec jekyll build -s sandbox -d sandbox/_site --trace
-    - name: Memory Analysis of Jekyll Build
-      run: bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb
 
   diff_profiles:
-    name: "Third-Party Repo Profile Diffs (Ruby ${{ matrix.ruby_version }})"
+    name: "Third-Party Repo Memory Profile (Ruby ${{ matrix.ruby_version }})"
     runs-on: "ubuntu-latest"
     strategy:
       fail-fast: false
@@ -86,14 +84,14 @@ jobs:
       env:
         KD_PATH: "../master"
       run: |
-        bundle install
+        bundle install --quiet
         echo
         bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb master
     - name: Memory Analysis of Jekyll Build with ref
       env:
         KD_PATH: "../calmdown"
       run: |
-        bundle install
+        bundle install --quiet
         echo
         bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb sandbox
     - name: Diff two profile reports

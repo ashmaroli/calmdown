@@ -21,8 +21,10 @@ if ENV['KD_PATH']
     contents = File.binread(report_file)
     contents = contents.gsub('  master/', '  calmdown/')
     File.binwrite(report_file, contents)
+  else
+    reporter.pretty_print(scale_bytes: true, normalize_paths: true)
+    puts ''
   end
-  puts ''
   puts "Detailed Report saved into: #{report_file.cyan}"
 else
   reporter.pretty_print(scale_bytes: true, normalize_paths: true)
