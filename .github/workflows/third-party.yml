@@ -84,14 +84,14 @@ jobs:
         bundler-cache: true
     - name: Memory Analysis of Jekyll Build with master
       env:
-        KD_PTH: "../master"
+        KD_PATH: "../master"
       run: |
         bundle install
         echo
         bundle exec ruby calmdown/.github/workflows/scripts/memprof.rb master
     - name: Memory Analysis of Jekyll Build with ref
       env:
-        KD_PTH: "../calmdown"
+        KD_PATH: "../calmdown"
       run: |
         bundle install
         echo
