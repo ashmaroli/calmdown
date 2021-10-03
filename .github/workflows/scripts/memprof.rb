@@ -17,10 +17,9 @@ if ENV['KD_PATH']
   report_file = "#{ARGV[0]}/memprof.txt"
   reporter.pretty_print(to_file: report_file, scale_bytes: true, normalize_paths: true)
   if ARGV[0] == 'master'
-  puts ''
-  puts 'Normalizing paths..'
+    puts 'Normalizing paths..'
     contents = File.binread(report_file)
-    contents = contents('  master/', '  calmdown/')
+    contents = contents.gsub('  master/', '  calmdown/')
     File.binwrite(report_file, contents)
   end
   puts ''
