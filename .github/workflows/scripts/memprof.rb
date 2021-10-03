@@ -14,7 +14,17 @@ reporter = MemoryProfiler.report(allow_files: ['lib/kramdown']) do
 end
 
 if ENV['KD_PATH']
-  reporter.pretty_print(to_file: "#{ARGV[0]}/memprof.txt", scale_bytes: true, normalize_paths: true)
+  report_file = "#{ARGV[0]}/memprof.txt"
+  reporter.pretty_print(to_file: report_file, scale_bytes: true, normalize_paths: true)
+  if ARGV[0] == 'master'
+  puts ''
+  puts 'Normalizing paths..'
+    contents = File.binread(report_file)
+    contents = contents('  master/', '  calmdown/')
+    File.binwrite(report_file, contents)
+  end
+  puts ''
+  puts "Detailed Report saved into: #{report_file.cyan}"
 else
   reporter.pretty_print(scale_bytes: true, normalize_paths: true)
 end
